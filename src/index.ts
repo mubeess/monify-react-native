@@ -2,9 +2,9 @@ export { default as MonifyPayment } from './MonifyPayment';
 export type { MonifyPaymentProps, MonifyPaymentRef } from './MonifyPayment';
 
 export { useMonifyPayment } from './useMonifyPayment';
-export type { 
-  UseMonifyPaymentConfig, 
-  UseMonifyPaymentReturn 
+export type {
+  UseMonifyPaymentConfig,
+  UseMonifyPaymentReturn,
 } from './useMonifyPayment';
 
 // Utility functions
@@ -20,35 +20,47 @@ export const MonifyUtils = {
       return false;
     }
   },
-  
+
   /**
    * Extract transaction reference from URL
    */
   extractTransactionRef: (url: string): string | null => {
     try {
       const urlObj = new URL(url);
-      return urlObj.searchParams.get('reference') || 
-             urlObj.searchParams.get('txRef') || 
-             urlObj.searchParams.get('transactionRef') || 
-             null;
+      return (
+        urlObj.searchParams.get('reference') ||
+        urlObj.searchParams.get('txRef') ||
+        urlObj.searchParams.get('transactionRef') ||
+        null
+      );
     } catch {
       return null;
     }
   },
-  
+
   /**
    * Check if URL indicates success
    */
-  isSuccessUrl: (url: string, patterns: string[] = ['success', 'completed']): boolean => {
+  isSuccessUrl: (
+    url: string,
+    patterns: string[] = ['success', 'completed']
+  ): boolean => {
     const lowercaseUrl = url.toLowerCase();
-    return patterns.some(pattern => lowercaseUrl.includes(pattern.toLowerCase()));
+    return patterns.some(pattern =>
+      lowercaseUrl.includes(pattern.toLowerCase())
+    );
   },
-  
+
   /**
    * Check if URL indicates failure
    */
-  isFailureUrl: (url: string, patterns: string[] = ['failed', 'error', 'cancelled']): boolean => {
+  isFailureUrl: (
+    url: string,
+    patterns: string[] = ['failed', 'error', 'cancelled']
+  ): boolean => {
     const lowercaseUrl = url.toLowerCase();
-    return patterns.some(pattern => lowercaseUrl.includes(pattern.toLowerCase()));
-  }
+    return patterns.some(pattern =>
+      lowercaseUrl.includes(pattern.toLowerCase())
+    );
+  },
 };
