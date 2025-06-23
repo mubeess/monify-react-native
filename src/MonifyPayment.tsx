@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -110,6 +110,11 @@ const MonifyPayment = React.forwardRef<MonifyPaymentRef, MonifyPaymentProps>(
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const webViewRef = useRef<WebView>(null);
+
+    // Reset error state when transactionUrl or visible changes
+    useEffect(() => {
+      setError(null);
+    }, [transactionUrl, visible]);
 
     const log = useCallback(
       (message: string, data?: any) => {

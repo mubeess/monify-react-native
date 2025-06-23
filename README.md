@@ -16,6 +16,8 @@ A React Native package for integrating Monify payment gateway using WebView with
 
 ## Installation
 
+> **Note:** This package requires [`react-native-webview`](https://github.com/react-native-webview/react-native-webview) as a peer dependency. You must install it in your project for `monify-react-native` to work correctly.
+
 ```bash
 npm install monify-react-native react-native-webview
 ```
@@ -44,24 +46,31 @@ import { View, TouchableOpacity, Text, Alert } from 'react-native';
 import { MonifyPayment, useMonifyPayment } from 'monify-react-native';
 
 const PaymentScreen = () => {
-  const { isVisible, isLoading, startPayment, transactionUrl, config, paymentRef } =
-    useMonifyPayment({
-      onSuccess: (data) => {
-        Alert.alert('Success', 'Payment completed successfully!');
-        console.log('Payment data:', data);
-      },
-      onFailure: (error) => {
-        Alert.alert('Error', 'Payment failed');
-        console.error('Payment error:', error);
-      },
-      onCancel: () => {
-        Alert.alert('Cancelled', 'Payment was cancelled');
-      },
-      debug: true, // Enable debug logs
-    });
+  const {
+    isVisible,
+    isLoading,
+    startPayment,
+    transactionUrl,
+    config,
+    paymentRef,
+  } = useMonifyPayment({
+    onSuccess: data => {
+      Alert.alert('Success', 'Payment completed successfully!');
+      console.log('Payment data:', data);
+    },
+    onFailure: error => {
+      Alert.alert('Error', 'Payment failed');
+      console.error('Payment error:', error);
+    },
+    onCancel: () => {
+      Alert.alert('Cancelled', 'Payment was cancelled');
+    },
+    debug: true, // Enable debug logs
+  });
 
   const handlePayment = () => {
-    const transactionUrl = 'https://sandbox.monnify.com/checkout/YOUR_TRANSACTION_URL';
+    const transactionUrl =
+      'https://sandbox.monnify.com/checkout/YOUR_TRANSACTION_URL';
     startPayment(transactionUrl);
   };
 
@@ -93,7 +102,8 @@ import { MonifyPayment } from 'monify-react-native';
 
 const PaymentScreen = () => {
   const [visible, setVisible] = useState(false);
-  const transactionUrl = 'https://sandbox.monnify.com/checkout/YOUR_TRANSACTION_URL';
+  const transactionUrl =
+    'https://sandbox.monnify.com/checkout/YOUR_TRANSACTION_URL';
 
   return (
     <>
@@ -104,11 +114,11 @@ const PaymentScreen = () => {
       <MonifyPayment
         visible={visible}
         transactionUrl={transactionUrl}
-        onSuccess={(data) => {
+        onSuccess={data => {
           setVisible(false);
           console.log('Payment successful:', data);
         }}
-        onFailure={(error) => {
+        onFailure={error => {
           setVisible(false);
           console.error('Payment failed:', error);
         }}
@@ -243,7 +253,7 @@ The package provides comprehensive error handling:
 
 ```tsx
 const { error, clearError } = useMonifyPayment({
-  onFailure: (error) => {
+  onFailure: error => {
     console.log('Error type:', error.error);
     console.log('Error details:', error.details);
   },
@@ -279,7 +289,11 @@ Here's a complete example with proper error handling:
 ```tsx
 import React from 'react';
 import { View, TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
-import { MonifyPayment, useMonifyPayment, MonifyUtils } from 'monify-react-native';
+import {
+  MonifyPayment,
+  useMonifyPayment,
+  MonifyUtils,
+} from 'monify-react-native';
 
 const PaymentScreen = () => {
   const {
@@ -292,15 +306,19 @@ const PaymentScreen = () => {
     config,
     paymentRef,
   } = useMonifyPayment({
-    onSuccess: (data) => {
-      Alert.alert('Payment Successful', 'Your payment has been processed successfully!', [
-        { text: 'OK', onPress: () => navigateToSuccess() },
-      ]);
+    onSuccess: data => {
+      Alert.alert(
+        'Payment Successful',
+        'Your payment has been processed successfully!',
+        [{ text: 'OK', onPress: () => navigateToSuccess() }]
+      );
     },
-    onFailure: (error) => {
-      Alert.alert('Payment Failed', error?.error || 'Something went wrong with your payment.', [
-        { text: 'Try Again', onPress: () => closePayment() },
-      ]);
+    onFailure: error => {
+      Alert.alert(
+        'Payment Failed',
+        error?.error || 'Something went wrong with your payment.',
+        [{ text: 'Try Again', onPress: () => closePayment() }]
+      );
     },
     onCancel: () => {
       Alert.alert('Payment Cancelled', 'You have cancelled the payment.');
@@ -336,7 +354,9 @@ const PaymentScreen = () => {
         onPress={handlePayment}
         disabled={isLoading}
       >
-        <Text style={styles.buttonText}>{isLoading ? 'Processing...' : 'Pay ₦1,000'}</Text>
+        <Text style={styles.buttonText}>
+          {isLoading ? 'Processing...' : 'Pay ₦1,000'}
+        </Text>
       </TouchableOpacity>
 
       {error && <Text style={styles.errorText}>Error: {error}</Text>}
